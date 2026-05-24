@@ -15,7 +15,7 @@ for i in dirs:
 
 
 def pageUpdate():
-    status = None
+    status = []
     for name, url in pages.items():
         print(name)
         file_path = f"data/{name}.txt"
@@ -39,7 +39,7 @@ def pageUpdate():
             with open("data/diffs/" + name + ".txt", "w", encoding="utf-8") as f:
                 f.write(old_page + "\n\n\n\n\n\n\n\n" + current_page)
 
-            status = []
+            
             status.append(name)
 
     return status

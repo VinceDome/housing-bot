@@ -31,7 +31,7 @@ async def sync(ctx):
 async def refresher():
     
     result = pageUpdate()
-    if result is not None:
+    if result != []:
         userD = await client.fetch_user(dev_id)
         msg_dm = await userD.create_dm()
         await msg_dm.send(f"[{result}] had an update!")
