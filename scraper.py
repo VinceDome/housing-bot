@@ -1,22 +1,30 @@
 import requests, os
 
 dirs = ["data", "data/diffs"]
-pages = {"geste":"https://www.geste-students.nl/", "5huizen":"https://5huizenvastgoedbeheer.nl/#/student-housing", "roomplaza":"https://www.roomplaza.com/en/html/web/search/home?city=3&startDate=2026-08-01"}
+wholePages = {"geste":"https://www.geste-students.nl/", "5huizen":"https://api.5huizenvastgoedbeheer.nl/v2/buildings", "roomplaza":"https://www.roomplaza.com/en/html/web/search/home?city=3&startDate=2026-08-01"}
 
 for i in dirs:
     #creates folder structure
     if not os.path.exists(i):
         os.mkdir(i)
-
+    
     #creates files
-    for a in pages.keys():
-        with open(f"{i}/{a}.txt", "a+") as f:
-            pass
+    for a in wholePages.keys():
+        #normal data files
+        if i == "data":
+            with open(f"{i}/{a}.txt", "a+") as f:
+                pass
+        else:
+            if not os.path.exists(i+"/"+a):
+                os.mkdir(i+"/"+a)
 
+            for e in ["old", "new"]:
+                with open(f"{i}/{a}/{e}.txt", "a+") as f:
+                    pass
 
-def pageUpdate():
+def WholePageUpdate():
     status = []
-    for name, url in pages.items():
+    for name, url in wholePages.items():
         print(name)
         file_path = f"data/{name}.txt"
 
@@ -36,8 +44,11 @@ def pageUpdate():
                 f.write(current_page)
 
             #save the difference
-            with open("data/diffs/" + name + ".txt", "w", encoding="utf-8") as f:
-                f.write(old_page + "\n\n\n\n\n\n\n\n" + current_page)
+            with open("data/diffs/"+name+"/old.txt", "w", encoding="utf-8") as f:
+                f.write(old_page)
+
+            with open("data/diffs/"+name+"/new.txt", "w", encoding="utf-8") as f:
+                f.write(current_page)
 
             
             status.append(name)
