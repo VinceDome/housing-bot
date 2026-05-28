@@ -54,5 +54,3 @@ def WholePageUpdate():
             status.append(name)
 
     return status
-        
-

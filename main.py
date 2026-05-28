@@ -45,18 +45,21 @@ async def diff(ctx, platform):
 
 
 
-@tasks.loop(minutes=5)
+@tasks.loop(seconds=30)
 async def refresher():
     
     result = WholePageUpdate()
     if result != []:
         userD = await client.fetch_user(dev_id)
         msg_dm = await userD.create_dm()
-        
+
         await msg_dm.send(f"{result} had an update!")
 
         for i in result:
-            await msg_dm.send(Diff(i))
+            try:
+                await msg_dm.send(Diff(i))
+            except:
+                await msg_dm.send("Difference too long")
         
 
 
