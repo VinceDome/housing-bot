@@ -78,6 +78,8 @@ def SendMail(subject, content):
     with open("data/settings/mailcreds.txt", "r", encoding="utf-8") as f:
         creds = f.read().strip().split("\n")
 
+    if len(creds) != 3:
+        return None
     
     sender, password, recipient = creds
     context = ssl.create_default_context()
