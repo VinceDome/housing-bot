@@ -38,9 +38,9 @@ async def refresher():
         await msg_dm.send(f"{result} had an update!")
 
         for i in result:
-            if i == "roomplaza":
+            if i == "plaza":
                 try:
-                    SendMail("Roomplaza update:)", Diff(i))
+                    SendMail("Plaza update:)", Diff(i))
                 except:
                     await msg_dm.send("Couldn't send email")
 
