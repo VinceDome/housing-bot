@@ -1,7 +1,7 @@
 import requests, os
 
 dirs = ["data", "data/diffs"]
-wholePages = {"geste":"https://www.geste-students.nl/", "5huizen":"https://api.5huizenvastgoedbeheer.nl/v2/buildings", "roomplaza":"https://www.roomplaza.com/en/html/web/search/home?city=3&startDate=2026-08-01"}
+wholePages = {"geste":"https://www.geste-students.nl/", "5huizen":"https://api.5huizenvastgoedbeheer.nl/v2/buildings", "roomplaza":"https://www.roomplaza.com/en/html/web/search/home?city=3&startDate=2026-08-01", "plaza":"https://plaza.newnewnew.space/en/availables-places/living-place#?gesorteerd-op=prijs%2B&locatie=Nederland%2B-%2BZuid-Holland"}
 
 for i in dirs:
     #creates folder structure
