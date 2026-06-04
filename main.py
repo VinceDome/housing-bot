@@ -1,4 +1,4 @@
-import discord, difflib, textwrap
+import discord
 from discord.ext import commands, tasks
 
 from tokens.discordToken import *
@@ -10,28 +10,11 @@ bot_id = 826458615027597343
 client = commands.Bot(command_prefix=".", case_insensitive = True, intents=discord.Intents.all())
 client.remove_command("help")
 
-def Diff(platform):
-    with open(f"data/diffs/{platform}/old.txt", "r", encoding="utf-8") as f:
-        old_page = f.read().strip()
-
-    with open(f"data/diffs/{platform}/new.txt", "r", encoding="utf-8") as f:
-        new_page = f.read().strip()
-
-
-    d = difflib.ndiff(textwrap.wrap(old_page), textwrap.wrap(new_page))
-
-    
-    final = ""
-    for a in d:
-        if not a.startswith("   ") and not a.startswith("  ") and not a.startswith(" ") and a != "\n" and a != "":
-            final+=("\n"+a)
-
-    return "```"+final+"```"
-
 @client.event
 async def on_ready():  
     print(f'{client.user} active!')
     refresher.start()
+    CreateFileStructure()
     
 
 @client.command()
@@ -46,8 +29,7 @@ async def diff(ctx, platform):
 
 
 @tasks.loop(seconds=30)
-async def refresher():
-    
+async def refresher(): 
     result = WholePageUpdate()
     if result != []:
         userD = await client.fetch_user(dev_id)
@@ -56,14 +38,12 @@ async def refresher():
         await msg_dm.send(f"{result} had an update!")
 
         for i in result:
+            if i == "roomplaza":
+                SendMail("Roomplaza update:)", Diff(i))
+
             try:
                 await msg_dm.send(Diff(i))
             except:
                 await msg_dm.send("Difference too long")
-        
-
-
-
-
 
 client.run(MENZA_TOKEN)
