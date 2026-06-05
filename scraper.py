@@ -38,10 +38,14 @@ def WholePageUpdate():
         session = requests.Session()
         if name == "plaza":
             page = session.post(url, json=plaza_payload)
+            payload = json.loads(page.text)
+            #total_search_count
+            current_page = str(payload["_metadata"]["total_search_count"])
+            print(current_page)
+
         else:
             page = session.get(url)
-        
-        current_page = page.text.strip()
+            current_page = page.text.strip()
 
         # Read previous content if it exists
 
