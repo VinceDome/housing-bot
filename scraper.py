@@ -1,7 +1,9 @@
-import requests, os, difflib, textwrap, smtplib, ssl
+import requests, os, difflib, textwrap, smtplib, ssl, json
 from email.message import EmailMessage
 
 platforms = {"geste":"https://www.geste-students.nl/", "5huizen":"https://api.5huizenvastgoedbeheer.nl/v2/buildings", "roomplaza":"https://www.roomplaza.com/en/html/web/search/home?city=3&startDate=2026-08-01", "plaza":"https://plaza.newnewnew.space/en/availables-places/living-place#?gesorteerd-op=prijs%2B&locatie=Nederland%2B-%2BZuid-Holland"}
+platforms["plaza"] = "https://mosaic-plaza-aanbodapi.zig365.nl/api/v1/actueel-aanbod?limit=60&locale=en_GB&page=0&sort=%2BreactionData.aangepasteTotaleHuurprijs"
+plaza_payload = {"filters":{"$and":[{"$and":[{"regio.id":{"$eq":"12"}},{"land.id":{"$eq":"524"}}]}]}, "hidden-filters":{"$and":[{"dwellingType.categorie":{"$eq":"woning"}},{"rentBuy":{"$eq":"Huur"}},{"isExtraAanbod":{"$eq":""}},{"isWoningruil":{"$eq":""}},{"$and":[{"$or":[{"street":{"$like":""}},{"houseNumber":{"$like":""}},{"houseNumberAddition":{"$like":""}}]},{"$or":[{"street":{"$like":""}},{"houseNumber":{"$like":""}},{"houseNumberAddition":{"$like":""}}]}]}]}}
 
 def CreateFileStructure():
     dirs = ["data", "data/diffs", "data/settings"]
@@ -29,12 +31,16 @@ def CreateFileStructure():
 def WholePageUpdate():
     status = []
     for name, url in platforms.items():
-        print(name)
+        
         newfilepath = f"data/diffs/{name}/new.txt"
         oldfilepath = f"data/diffs/{name}/old.txt"
 
         session = requests.Session()
-        page = session.get(url)
+        if name == "plaza":
+            page = session.post(url, json=plaza_payload)
+        else:
+            page = session.get(url)
+        
         current_page = page.text.strip()
 
         # Read previous content if it exists
