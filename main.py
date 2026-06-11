@@ -29,8 +29,12 @@ async def diff(ctx, platform):
 
 
 @tasks.loop(seconds=30)
-async def refresher(): 
-    result = WholePageUpdate()
+async def refresher():
+    try:
+        result = WholePageUpdate()
+    except:
+        result = ["some error occured"]
+
     if result != []:
         userD = await client.fetch_user(dev_id)
         msg_dm = await userD.create_dm()
