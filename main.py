@@ -21,8 +21,10 @@ async def on_ready():
 async def diff(ctx, platform):
     if ctx.author.id != dev_id:
         return None
-    
-    final = Diff(platform)
+    try:
+        final = Diff(platform)
+    except:
+        final = "Difference too long"
 
     await ctx.send(final)
 
